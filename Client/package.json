@@ -1,0 +1,21 @@
+{
+  "name": "client",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "client1.js",
+  "license": "ISC",
+  "scripts": {
+    "start:ts": "tsc -w",
+    "start:js": "nodemon ./dist/client1.js",
+    "start": "concurrently npm:start:*"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
