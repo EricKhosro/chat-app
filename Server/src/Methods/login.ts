@@ -1,6 +1,6 @@
-import { users } from "../db";
-import { IMethodClass } from "../interfaces/interfaces";
-import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces";
+import { users } from "../db.js";
+import { IMethodClass } from "../interfaces/interfaces.js";
+import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces.js";
 
 export class Login implements IMethodClass<ILoginData> {
   public handle = (data: ILoginData): ILoginRes => {
