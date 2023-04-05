@@ -6,7 +6,7 @@ export interface IPacket<T> {
 }
 
 export interface IMethodClass<T> {
-  handle: (data: T) => IPacket<boolean>;
+  handle: (data: T) => any;
 }
 
 export interface IMethodFactory<T> {
