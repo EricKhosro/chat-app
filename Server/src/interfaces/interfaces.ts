@@ -13,11 +13,12 @@ export interface IMethodFactory<T> {
   createClass: (className: string) => IMethodClass<T> | null;
 }
 
-export interface IRequestBody {
-  id: number;
+export interface IRequestData<T> {
+  methodName: "string";
+  body: T;
 }
 
-export interface ILoginData extends IRequestBody {
+export interface ILoginData {
   username: string;
   password: string;
 }

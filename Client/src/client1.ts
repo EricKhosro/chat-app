@@ -8,4 +8,6 @@ client1.connect(3000, "localhost", () => {
 client1.on("error", (err: Error) => {
   console.log(`Error: ${err.message}`);
 });
-client1.write(`login|"{'user':'user1','pass':123,'id':1}"`);
+client1.write(
+  `{"methodName":"login","body":{"username":"user1","password":123}}`
+);

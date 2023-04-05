@@ -1,4 +1,4 @@
-import { IConnection } from "./interfaces/interfaces";
+import { IConnection, IRequestData } from "./interfaces/interfaces";
 import net from "net";
 import MethodFactory from "./methodFactory.js";
 
@@ -15,11 +15,8 @@ export class TCPServer implements IConnection<net.Server> {
 
       socket.on("data", (data: Buffer) => {
         console.log("data recieved");
-        const stringifiedData = data.toString();
-        const dataParts = stringifiedData.split("|");
-        const method = dataParts[0];
-        const reqBody = JSON.parse(dataParts[1]);
-        newRequestHandler(method, reqBody);
+        const parsedData: IRequestData<any> = JSON.parse(data.toString());
+        newRequestHandler(parsedData.methodName, parsedData.body);
       });
 
       socket.on("end", () => {
