@@ -1,5 +1,5 @@
 import { IMethodClass, IMethodFactory } from "./interfaces/interfaces";
-import { Login } from "./Methods/login";
+import { Login } from "./Methods/login.js";
 
 export default class MethodFactory implements IMethodFactory<any> {
   #methodName: string;
