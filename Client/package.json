@@ -3,11 +3,11 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "client1.js",
+  "main": "index.js",
   "license": "ISC",
   "scripts": {
     "start:ts": "tsc -w",
-    "start:js": "nodemon ./dist/client1.js",
+    "start:js": "nodemon ./dist/index.js",
     "start": "concurrently npm:start:*"
   },
   "devDependencies": {
