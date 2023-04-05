@@ -5,21 +5,26 @@ export interface IPacket<T> {
   data: T;
 }
 
-export interface IMethodClass<T> {
-  handle: (data: T) => any;
+export interface IMethodClass<Input, Output> {
+  handle: (data: Input) => Output;
 }
 
-export interface IMethodFactory<T> {
-  createClass: (className: string) => IMethodClass<T> | null;
+export interface IMethodFactory<Input, Output> {
+  createClass: (className: string) => IMethodClass<Input, Output> | null;
 }
 
 export interface IRequestData<T> {
-  methodName: "string";
+  methodName: string;
   body: T;
 }
 
 export interface IConnection<T> {
   createConnection: () => T;
+}
+
+export interface IFriends {
+  username: string;
+  id: number;
 }
 
 export interface IUser {

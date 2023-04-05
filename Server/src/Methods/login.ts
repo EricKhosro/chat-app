@@ -2,7 +2,7 @@ import { users } from "../db.js";
 import { IMethodClass } from "../interfaces/interfaces.js";
 import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces.js";
 
-export class Login implements IMethodClass<ILoginData> {
+export class Login implements IMethodClass<ILoginData, ILoginRes> {
   public handle = (data: ILoginData): ILoginRes => {
     const targetUser = users.find(
       (user) =>
