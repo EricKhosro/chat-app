@@ -7,14 +7,13 @@ export default class MethodFactory implements IMethodFactory<any> {
     this.#methodName = methodName;
   }
 
-  public createClass = (): IMethodClass<any> | null => {
+  public createClass = (): IMethodClass<any> => {
     switch (this.#methodName) {
       case "login":
         return new Login();
 
       default: {
-        console.log("invalid method name!");
-        return null;
+        throw new Error("invalid method name");
       }
     }
   };
