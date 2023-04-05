@@ -18,11 +18,12 @@ export interface IRequestData<T> {
   body: T;
 }
 
-export interface ILoginData {
-  username: string;
-  password: string;
-}
-
 export interface IConnection<T> {
   createConnection: () => T;
+}
+
+export interface IUser {
+  username: string;
+  password: string;
+  id: number;
 }
