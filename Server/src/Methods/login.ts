@@ -8,8 +8,10 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
       (user) =>
         user.username === data.username && user.password === data.password
     );
-    console.log({ targetUser });
-    if (targetUser) return { msg: "successful login", token: targetUser.id };
+    if (targetUser) {
+      
+      return { msg: "successful login", token: targetUser.id };
+    }
     throw new Error("wrong user pass");
   };
 }

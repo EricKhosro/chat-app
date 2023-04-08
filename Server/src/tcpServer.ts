@@ -1,6 +1,6 @@
 import { IConnection, IRequestData } from "./interfaces/interfaces";
 import net, { Socket } from "net";
-import { newRequestHandler } from "./requestHandler.js";
+import { RequestHandler } from "./requestHandler.js";
 
 export class TCPServer implements IConnection<net.Server> {
   createConnection = () => {
@@ -9,16 +9,7 @@ export class TCPServer implements IConnection<net.Server> {
 
       socket.on("data", (data: Buffer) => {
         console.log("data recieved");
-        const parsedData: IRequestData<any> = JSON.parse(data.toString());
-        let res;
-        try {
-          res = newRequestHandler(parsedData.methodName, parsedData.body);
-        } catch (error) {
-          if (error instanceof Error) res = error.message;
-          else res = "UnExpected Error";
-        } finally {
-          socket.write(JSON.stringify(res));
-        }
+        return data;
       });
 
       socket.on("end", () => {
@@ -28,5 +19,9 @@ export class TCPServer implements IConnection<net.Server> {
         console.log("Socket got problems: ", error.message);
       });
     });
+  };
+
+  public sendData = (socket: Socket, data: JSON) => {
+    socket.write(JSON.stringify(data));
   };
 }
