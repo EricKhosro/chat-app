@@ -1,16 +1,16 @@
 import { Client } from "./client.js";
-import { IGetUsersData, ILoginData } from "./interfaces";
+import { GetUsersDTO, ILoginData } from "./interfaces";
 
 const client1 = new Client(1);
 
-client1.connectToServer();
-client1.sendToServer<ILoginData>({
-  methodName: "login",
-  body: {
-    username: "user1",
-    password: "123",
-  },
-});
+// client1.connectToServer();
+// client1.sendToServer<ILoginData>({
+//   methodName: "login",
+//   body: {
+//     username: "user1",
+//     password: "123",
+//   },
+// });
 
 const client2 = new Client(2);
 
@@ -23,7 +23,9 @@ client2.sendToServer<ILoginData>({
   },
 });
 
-client2.sendToServer<IGetUsersData>({
+client2.sendToServer<GetUsersDTO>({
   methodName: "getUsers",
-  body: { id: 2 },
+  body: {
+    users: [{ id: 2 }],
+  },
 });
