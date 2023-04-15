@@ -1,6 +1,6 @@
 export interface IRequestData<T> {
   methodName: string;
-  body: T;
+  body?: T;
 }
 export interface IClient {
   connectToServer: () => void;
@@ -12,6 +12,10 @@ export interface ILoginData {
   password: string;
 }
 
-export interface IGetUsersData {
+export interface IUserID {
   id: number;
+}
+
+export interface GetUsersDTO {
+  users: Array<IUserID>;
 }
