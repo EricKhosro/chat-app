@@ -1,14 +1,19 @@
-import { users } from "../db.js";
-import { IGetUsersData, IGetUsersRes } from "../interfaces/getUsersInterface";
+import { Database } from "../db.js";
+import { GetUsersDTO, IGetUsersData } from "../interfaces/getUsersInterface";
 import { IFriends, IMethodClass } from "../interfaces/interfaces.js";
 
-export class GetUsers implements IMethodClass<IGetUsersData, IGetUsersRes> {
-  public handle = (data: IGetUsersData): IGetUsersRes => {
-    const friends: Array<IFriends> = [];
-    users.forEach((user) => {
-      if (data.id !== user.id)
-        friends.push({ username: user.username, id: user.id });
+export class GetUsers
+  implements IMethodClass<GetUsersDTO | undefined, Array<IFriends>>
+{
+  public handle = (data: GetUsersDTO | undefined) => {
+    const db = new Database();
+    const res: Array<IFriends> = [];
+    db.getUsersByID().forEach((user) => {
+      data?.users.forEach((data) => {
+        if (data.id !== user.id)
+          res.push({ id: user.id, username: user.username });
+      });
     });
-    return { users: friends };
+    return res;
   };
 }
