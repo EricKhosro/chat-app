@@ -1,19 +1,20 @@
+import { IRequestData } from "./interfaces/interfaces";
 import MethodFactory from "./methodFactory.js";
 
 export class RequestHandler {
-  #methodName: string;
-  #body: any;
+  public deSerializeData = (data: Buffer): IRequestData<any> => {
+    const parsedData = JSON.parse(data.toString());
+    console.log({ parsedData });
 
-  constructor(methodName: string, body: any) {
-    this.#methodName = methodName;
-    this.#body = body;
-  }
+    return parsedData;
+  };
 
-  public handle() {
-    const methodFactory = new MethodFactory(this.#methodName);
+  public handle(methodName: string, body?: any) {
+    const methodFactory = new MethodFactory(methodName);
     try {
       const methodClass = methodFactory.createClass();
-      return methodClass.handle(this.#body);
+      const res = methodClass.handle(body);
+      return res;
     } catch (error) {
       if (error instanceof Error) return error.message;
       else return "UnExpected Error";
