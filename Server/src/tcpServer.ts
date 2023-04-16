@@ -12,21 +12,23 @@ export class TCPServer implements IServer {
       console.log("new Client connected");
       const tcpSocket = new TCPSocket(socket);
       tcpSocket.setEvents({
-        onData: (data: Buffer) => {
+        onData: (data: Buffer, guid: string | null) => {
           const requestHandler = new RequestHandler();
-          const parsedData = requestHandler.deSerializeData(data);
+          const parsedDataArray = requestHandler.deSerializeData(data);
+          parsedDataArray.map((parsedData) => {
+            const res = requestHandler.handle(
+              parsedData.methodName,
+              guid,
+              parsedData?.body
+            );
 
-          const res = requestHandler.handle(
-            parsedData.methodName,
-            parsedData?.body
-          );
-
-          tcpSocket.sendData(res);
+            tcpSocket.sendData(res);
+          });
         },
-        onDisconnect: () => {
+        onDisconnect: (guid: string | null) => {
           console.log("Client Disconnected");
         },
-        onError: (error: Error) => {
+        onError: (error: Error, guid: string | null) => {
           console.log(error.message);
         },
       });
