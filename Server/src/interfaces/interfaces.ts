@@ -8,7 +8,7 @@ export interface IPacket<T> {
 }
 
 export interface IMethodClass<Input, Output> {
-  handle: (data: Input) => Output;
+  handle: (data: Input, guid: string | null) => Output;
 }
 
 export interface IMethodFactory<Input, Output> {
@@ -27,25 +27,27 @@ export interface IServer {
 }
 
 export interface ISocketEvents {
-  onData: (data: Buffer) => void;
-  onDisconnect: () => void;
-  onError: (error: Error) => void;
+  onData: (data: Buffer, guid: string | null) => void;
+  onDisconnect: (guid: string | null) => void;
+  onError: (error: Error, guid: string | null) => void;
 }
 
 export interface ISocket {
   setEvents: (events: ISocketEvents) => void;
-  sendData: (data: Buffer) => void;
+  sendData: (data: any) => void;
+  setGuid: (guid: string) => void;
+  getGuid: () => string | null;
 }
 
 export interface IFriends {
   username: string;
-  id: number;
+  id: string | null;
 }
 
 export interface IUser {
   username: string;
   password: string;
-  id: number;
+  id: string | null;
 }
 
 export interface ISocketHandler {
@@ -55,4 +57,8 @@ export interface ISocketHandler {
 export interface IRegisteredSocket {
   socket: ISocket;
   guid: string;
+}
+
+export interface IResponse {
+  methodname: string;
 }
