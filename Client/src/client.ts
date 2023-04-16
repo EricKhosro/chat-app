@@ -1,4 +1,9 @@
-import { IClient, IRequestData } from "./interfaces.js";
+import {
+  GetUsersDTO,
+  IClient,
+  ILoginData,
+  IRequestData,
+} from "./interfaces.js";
 import net from "net";
 export class Client implements IClient {
   #client: net.Socket;
@@ -21,8 +26,24 @@ export class Client implements IClient {
     });
   };
 
-  public sendToServer =<T> (data: IRequestData<T>) => {
+  #sendToServer = <T>(data: IRequestData<T>) => {
     this.#client.write(JSON.stringify(data));
   };
-}
 
+  public login = (username: string, password: string) => {
+    this.#sendToServer<ILoginData>({
+      methodName: "login",
+      body: {
+        username,
+        password,
+      },
+    });
+  };
+
+  public getUsers = () => {
+    this.#sendToServer<GetUsersDTO>({
+      methodName: "getUsers",
+      body: {},
+    });
+  };
+}
