@@ -4,7 +4,9 @@ export interface IRequestData<T> {
 }
 export interface IClient {
   connectToServer: () => void;
-  sendToServer: (data: IRequestData<any>) => void;
+  // sendToServer: (data: IRequestData<any>) => void;
+  login: (username: string, password: string) => void;
+  getUsers: () => void;
 }
 
 export interface ILoginData {
@@ -16,6 +18,4 @@ export interface IUserID {
   id: number;
 }
 
-export interface GetUsersDTO {
-  users: Array<IUserID>;
-}
+export interface GetUsersDTO {}
