@@ -1,12 +1,12 @@
-import { Database } from "../db.js";
+import { UserManager } from "../userManager.js";
 import { IMethodClass } from "../interfaces/interfaces.js";
 import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces.js";
 
 export class Login implements IMethodClass<ILoginData, ILoginRes> {
-  public handle = (data: ILoginData): ILoginRes => {
-    const db = new Database();
+  public handle = (data: ILoginData, guid: string | null): ILoginRes => {
+    const userManager = new UserManager();
 
-    const targetUser = db
+    const targetUser = userManager
       .getUsersByUsername([data.username])
       .find(
         (user) =>
@@ -14,8 +14,17 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
       );
 
     if (targetUser) {
-      return { msg: "successful login", token: targetUser.id };
+      userManager.updateUserId(
+        { username: data.username, password: data.password, id: null },
+        guid
+      );
+      return {
+        methodname: "login",
+        msg: "successful login",
+        token: guid || "-1",
+      };
     }
     throw new Error("wrong user pass");
   };
 }
+
