@@ -2,18 +2,27 @@ import { IRequestData } from "./interfaces/interfaces";
 import MethodFactory from "./methodFactory.js";
 
 export class RequestHandler {
-  public deSerializeData = (data: Buffer): IRequestData<any> => {
-    const parsedData = JSON.parse(data.toString());
-    console.log({ parsedData });
+  public deSerializeData = (data: Buffer): Array<IRequestData<any>> => {
+    const res: Array<IRequestData<any>> = [];
+    try {
+      res.push(JSON.parse(data.toString()));
+    } catch {
+      const splittedData: Array<string> = data.toString().split("}{");
 
-    return parsedData;
+      splittedData.forEach((element, index) => {
+        if (index % 2 === 0) splittedData[index] = element + "}";
+        else splittedData[index] = "{" + element;
+        res.push(JSON.parse(splittedData[index]));
+      });
+    }
+    return res;
   };
 
-  public handle(methodName: string, body?: any) {
+  public handle(methodName: string, guid: string | null, body?: any) {
     const methodFactory = new MethodFactory(methodName);
     try {
       const methodClass = methodFactory.createClass();
-      const res = methodClass.handle(body);
+      const res = methodClass.handle(body, guid);
       return res;
     } catch (error) {
       if (error instanceof Error) return error.message;
@@ -21,14 +30,3 @@ export class RequestHandler {
     }
   }
 }
-
-// const parsedData: IRequestData<any> = JSON.parse(data.toString());
-// let res;
-// try {
-//   res = new RequestHandler(parsedData.methodName, parsedData.body);
-// } catch (error) {
-//   if (error instanceof Error) res = error.message;
-//   else res = "UnExpected Error";
-// } finally {
-//   socket.write(JSON.stringify(res));
-// }
