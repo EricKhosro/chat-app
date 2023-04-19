@@ -31,8 +31,6 @@ export class ServerResponseHandler {
 
   public handle = () => {
     this.#data.map((j) => {
-      console.log({ j });
-
       switch (j.methodName) {
         case "login":
           this.#loginHandler(j.body);
@@ -50,8 +48,7 @@ export class ServerResponseHandler {
   };
 
   #loginHandler = (values: ILoginResponse) => {
-    console.log("loginHandler");
-    console.log({ values });
+    console.log({ loginValues: values });
 
     this.#guid = values.token;
   };
@@ -59,12 +56,16 @@ export class ServerResponseHandler {
   public getGuid = () => this.#guid;
 
   #getUsersHandler = (values: IGetUsersResponse) => {
+    console.log({ getUsersValues: values });
+
     this.#users = values.users;
   };
 
   public getUsers = () => this.#users;
 
   #sendMessageHandler = (values: SendMessageDTO) => {
+    console.log({ sendMessageValues: values });
+
     console.log(`${values.senderName}: ${values.message}`);
   };
 }

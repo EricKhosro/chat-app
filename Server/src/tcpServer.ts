@@ -21,8 +21,7 @@ export class TCPServer implements IServer {
               guid,
               parsedData?.body
             );
-
-            tcpSocket.sendData(res);
+            if (res) tcpSocket.sendData(res);
           });
         },
         onDisconnect: (guid: string | null) => {
