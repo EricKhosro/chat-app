@@ -22,10 +22,11 @@ export interface IServer {
   createServer: () => void;
   setOnNewSocket: (onNewSocket: (socket: ISocket) => void) => void;
   startListening: (port: number, host: string) => void;
+  setEvents: (events: ISocketEvents) => void;
 }
 
 export interface ISocketEvents {
-  onData: (data: Buffer, guid: string | null) => void;
+  onData: (data: Buffer, guid: string | null) => Array<IRequestData<any>>;
   onDisconnect: (guid: string | null) => void;
   onError: (error: Error, guid: string | null) => void;
 }
