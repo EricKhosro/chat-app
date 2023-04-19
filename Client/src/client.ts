@@ -3,17 +3,23 @@ import {
   IClient,
   ILoginData,
   IRequestData,
+  SendMessageDTO,
 } from "./interfaces.js";
 import net from "net";
+import { ServerResponseHandler } from "./serverResponseHandler.js";
+
 export class Client implements IClient {
   #client: net.Socket;
-  #id: number;
+  #name: string;
 
-  constructor(clientId: number) {
+  #serverResponseHandler = new ServerResponseHandler();
+  constructor(clientName: string) {
     this.#client = new net.Socket();
-    this.#id = clientId;
+    this.#name = clientName;
     this.#client.on("data", (data: Buffer) => {
-      console.log(data.toString());
+      // console.log(data.toString());
+      this.#serverResponseHandler.deserialize(data);
+      this.#serverResponseHandler.handle();
     });
     this.#client.on("error", (err: Error) => {
       console.log(`Error: ${err.message}`);
@@ -22,7 +28,7 @@ export class Client implements IClient {
 
   public connectToServer = () => {
     this.#client.connect(3000, "localhost", () => {
-      console.log(`client${this.#id} connected`);
+      console.log(`${this.#name} connected`);
     });
   };
 
@@ -41,9 +47,60 @@ export class Client implements IClient {
   };
 
   public getUsers = () => {
-    this.#sendToServer<GetUsersDTO>({
-      methodName: "getUsers",
-      body: {},
-    });
+    const guid = this.#serverResponseHandler.getGuid();
+    if (guid) {
+      this.#sendToServer<GetUsersDTO>({
+        methodName: "getUsers",
+        body: {},
+      });
+    } else {
+      const myInterval = setInterval(() => {
+        if (this.#serverResponseHandler.getGuid()) {
+          this.getUsers();
+          clearInterval(myInterval);
+        }
+      }, 1000);
+    }
+  };
+
+  public sendMessage = (message: string, receiversIDs?: Array<string>) => {
+    //if !receiversIds send to all active users
+    let finalReceiversIDs: Array<string> = [];
+
+    const guid = this.#serverResponseHandler.getGuid();
+
+    if (guid) {
+      if (receiversIDs) finalReceiversIDs = receiversIDs;
+      else {
+        if (this.#serverResponseHandler.getUsers().length) {
+          this.#serverResponseHandler.getUsers().map((user) => {
+            if (user.id && user.id !== guid) finalReceiversIDs.push(user.id);
+          });
+
+          this.#sendToServer<SendMessageDTO>({
+            methodName: "sendMessage",
+            body: {
+              message,
+              receiversIDs: finalReceiversIDs,
+              senderName: this.#name,
+            },
+          });
+        } else {
+          const myInterval = setInterval(() => {
+            if (this.#serverResponseHandler.getUsers().length) {
+              this.sendMessage(message, receiversIDs);
+              clearInterval(myInterval);
+            }
+          }, 1000);
+        }
+      }
+    } else {
+      const myInterval = setInterval(() => {
+        if (this.#serverResponseHandler.getGuid()) {
+          this.sendMessage(message, receiversIDs);
+          clearInterval(myInterval);
+        }
+      }, 1000);
+    }
   };
 }

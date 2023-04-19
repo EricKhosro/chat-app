@@ -1,5 +1,3 @@
-import { Socket } from "net";
-
 export interface IPacket<T> {
   msg: string;
   errorCode?: number;
@@ -60,5 +58,5 @@ export interface IRegisteredSocket {
 }
 
 export interface IResponse {
-  methodname: string;
+  methodName: string;
 }

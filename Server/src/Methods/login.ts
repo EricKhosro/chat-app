@@ -2,11 +2,10 @@ import { UserManager } from "../userManager.js";
 import { IMethodClass } from "../interfaces/interfaces.js";
 import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces.js";
 
+export const globalUserManager = new UserManager();
 export class Login implements IMethodClass<ILoginData, ILoginRes> {
   public handle = (data: ILoginData, guid: string | null): ILoginRes => {
-    const userManager = new UserManager();
-
-    const targetUser = userManager
+    const targetUser = globalUserManager
       .getUsersByUsername([data.username])
       .find(
         (user) =>
@@ -14,17 +13,22 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
       );
 
     if (targetUser) {
-      userManager.updateUserId(
+      globalUserManager.updateUserId(
         { username: data.username, password: data.password, id: null },
         guid
       );
+      console.log({ users: globalUserManager.getFriends() });
+
       return {
-        methodname: "login",
-        msg: "successful login",
-        token: guid || "-1",
+        methodName: "login",
+        body: {
+          msg: "successful login",
+          token: guid || "-1",
+        },
       };
     }
     throw new Error("wrong user pass");
   };
 }
+
 

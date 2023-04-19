@@ -7,5 +7,7 @@ export interface IGetUsersData {
   id: number;
 }
 export interface IGetUsersRes extends IResponse {
-  users: Array<IFriends>;
+  body: {
+    users: Array<IFriends>;
+  };
 }

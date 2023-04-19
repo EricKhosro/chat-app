@@ -6,6 +6,8 @@ export interface ILoginData {
 }
 
 export interface ILoginRes extends IResponse {
-  token: string;
-  msg: string;
+  body: {
+    token: string;
+    msg: string;
+  };
 }

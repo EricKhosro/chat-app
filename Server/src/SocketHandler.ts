@@ -14,6 +14,6 @@ export class SocketHandler implements ISocketHandler {
       guid,
     });
 
-    // socket.sendData({ methodname: "successfulConnection", guid });
+    // socket.sendData({ methodName: "successfulConnection", guid });
   };
 }
