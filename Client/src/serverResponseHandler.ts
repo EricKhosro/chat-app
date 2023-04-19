@@ -24,7 +24,6 @@ export class ServerResponseHandler {
         res.push(JSON.parse(splittedData[index]));
       });
     }
-    console.log({ res });
 
     this.#data = res;
   };
