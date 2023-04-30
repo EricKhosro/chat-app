@@ -1,4 +1,4 @@
-import { SocketHandler } from "./SocketHandler.js";
+import { SocketHandler, globalSocketPool } from "./SocketHandler.js";
 import { ISocket } from "./interfaces/interfaces";
 import { TCPServer } from "./tcpServer.js";
 import { RequestHandler } from "./requestHandler.js";
@@ -16,6 +16,7 @@ server.setEvents({
   },
   onDisconnect: (guid: string | null) => {
     console.log("Client Disconnected");
+    if (guid) socketHandler.onSocketDisconnect(guid);
   },
   onError: (error: Error, guid: string | null) => {
     console.log(error.message);

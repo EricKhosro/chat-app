@@ -13,7 +13,8 @@ export class SocketHandler implements ISocketHandler {
       socket,
       guid,
     });
-
-    // socket.sendData({ methodName: "successfulConnection", guid });
+  };
+  public onSocketDisconnect = (guid: string) => {
+    globalSocketPool.removeRegisteredSocket(guid);
   };
 }

@@ -17,18 +17,21 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
         { username: data.username, password: data.password, id: null },
         guid
       );
-      console.log({ users: globalUserManager.getFriends() });
 
       return {
         methodName: "login",
         body: {
           msg: "successful login",
-          token: guid || "-1",
+          token: guid || "",
         },
       };
     }
-    throw new Error("wrong user pass");
+    return {
+      methodName: "login",
+      body: {
+        msg: "wrong user pass",
+        token: "-1",
+      },
+    };
   };
 }
-
-

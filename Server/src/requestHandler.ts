@@ -22,9 +22,15 @@ export class RequestHandler {
     const methodFactory = new MethodFactory(methodName);
     try {
       const methodClass = methodFactory.createClass();
+      console.log({ handleGuid: guid });
+
       const res = methodClass.handle(body, guid);
+      console.log({ res });
+
       return res;
     } catch (error) {
+      console.log("handle catch");
+
       if (error instanceof Error) return error.message;
       else return "UnExpected Error";
     }

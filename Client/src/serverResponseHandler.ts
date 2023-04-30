@@ -9,7 +9,7 @@ import {
 export class ServerResponseHandler {
   #guid: string | null = null;
   #data: Array<IRequestData<any>> = [];
-  #users: Array<IFriends> = [];
+  #users: Array<IFriends> | null = null;
 
   public deserialize = (data: Buffer) => {
     const res: Array<IRequestData<any>> = [];
@@ -52,15 +52,46 @@ export class ServerResponseHandler {
     this.#guid = values.token;
   };
 
-  public getGuid = () => this.#guid;
+  public resetGuid = () => (this.#guid = null);
+
+  public getGuid = (): Promise<{ guid: string }> =>
+    new Promise((resolve, reject) => {
+      if (this.#guid) {
+        resolve({ guid: this.#guid });
+      } else {
+        const intervalId = setInterval(() => {
+          if (this.#guid) {
+            clearInterval(intervalId);
+            resolve({ guid: this.#guid });
+          }
+        }, 500);
+      }
+    });
 
   #getUsersHandler = (values: IGetUsersResponse) => {
-    console.log({ getUsersValues: values });
-
-    this.#users = values.users;
+    console.log("other users: ");
+    const res: Array<IFriends> = [];
+    values.users.map((u) => {
+      if (u.id !== this.#guid) {
+        res.push(u);
+        console.log(u);
+      }
+    });
+    this.#users = res;
   };
 
-  public getUsers = () => this.#users;
+  public getUsers = (): Promise<{ users: Array<IFriends> }> =>
+    new Promise((resolve, reject) => {
+      if (this.#users) resolve({ users: this.#users });
+      else {
+        const intervalId = setInterval(() => {
+          if (this.#users) {
+            clearInterval(intervalId);
+            resolve({ users: this.#users });
+          }
+        }, 500);
+      }
+    });
 
   #sendMessageHandler = (values: SendMessageDTO) => {
     console.log({ sendMessageValues: values });

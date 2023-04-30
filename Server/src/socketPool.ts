@@ -21,4 +21,13 @@ export class SocketPool {
     this.#registeredSockets.push(registerSocket);
     console.log(this.#registeredSockets);
   };
+
+  public removeRegisteredSocket = (guid: string) => {
+    const disconnectedSocketIndex = this.#registeredSockets.findIndex(
+      (socket) => socket.guid === guid
+    );
+    if (!disconnectedSocketIndex) return console.log("Didn't Find The Socket");
+    this.#registeredSockets.splice(disconnectedSocketIndex, 1);
+    console.log(`guid:${guid} was deleted`);
+  };
 }

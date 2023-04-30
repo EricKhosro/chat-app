@@ -51,6 +51,7 @@ export interface IUser {
 
 export interface ISocketHandler {
   registerSocker: (socket: ISocket) => void;
+  onSocketDisconnect: (guid: string) => void;
 }
 
 export interface IRegisteredSocket {
