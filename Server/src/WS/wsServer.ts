@@ -7,8 +7,12 @@ export class WSServer implements IServer {
   #server: WebSocketServer | null = null;
   #events: ISocketEvents | null = null;
 
-  constructor() {
-    this.#server?.on("connection", (socket) => {
+  public createServer = () => {
+    this.#server = new WebSocketServer({ port: 5000, host: "localhost" });
+
+    this.#server.on("connection", (socket) => {
+      console.log("WS Client connected");
+
       const wsSocket = new WSSocket(socket);
       if (!this.#events)
         return console.log("tcp server events was not provided");
@@ -16,10 +20,6 @@ export class WSServer implements IServer {
 
       if (this.#onNewSocket) this.#onNewSocket(wsSocket);
     });
-  }
-
-  public createServer = () => {
-    this.#server = new WebSocketServer({ port: 3000 });
   };
   public setEvents = (events: ISocketEvents) => {
     this.#events = events;
