@@ -1,6 +1,6 @@
 import { Socket } from "net";
-import { ISocket, ISocketEvents } from "./interfaces/interfaces";
-import { RequestHandler } from "./requestHandler.js";
+import { ISocket, ISocketEvents } from "../interfaces/interfaces";
+import { RequestHandler } from "../requestHandler.js";
 
 export class TCPSocket implements ISocket {
   #socket: Socket;

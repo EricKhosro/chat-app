@@ -1,4 +1,4 @@
-import { IServer, ISocket, ISocketEvents } from "./interfaces/interfaces";
+import { IServer, ISocket, ISocketEvents } from "../interfaces/interfaces";
 import net, { Socket } from "net";
 import { TCPSocket } from "./tcpSocket.js";
 
