@@ -1,14 +1,15 @@
-import { SocketHandler, globalSocketPool } from "./SocketHandler.js";
+import { SocketHandler } from "./SocketHandler.js";
 import { ISocket } from "./interfaces/interfaces";
-import { TCPServer } from "./tcpServer.js";
+import { TCPServer } from "./TCP/tcpServer.js";
 import { RequestHandler } from "./requestHandler.js";
+import { WSServer } from "./WS/wsServer.js";
 
-const server = new TCPServer();
+const tcpServer = new TCPServer();
 const socketHandler = new SocketHandler();
-server.setOnNewSocket((socket: ISocket) => {
+tcpServer.setOnNewSocket((socket: ISocket) => {
   socketHandler.registerSocker(socket);
 });
-server.setEvents({
+tcpServer.setEvents({
   onData: (data: Buffer, guid: string | null) => {
     const requestHandler = new RequestHandler();
     const parsedDataArray = requestHandler.deSerializeData(data);
@@ -22,5 +23,26 @@ server.setEvents({
     console.log(error.message);
   },
 });
-server.createServer();
-server.startListening(3000, "localhost");
+tcpServer.createServer();
+tcpServer.startListening(3000, "localhost");
+
+const wSServer = new WSServer();
+wSServer.setOnNewSocket((socket: ISocket) => {
+  socketHandler.registerSocker(socket);
+});
+wSServer.setEvents({
+  onData: (data: Buffer, guid: string | null) => {
+    const requestHandler = new RequestHandler();
+    const parsedDataArray = requestHandler.deSerializeData(data);
+    return parsedDataArray;
+  },
+  onDisconnect: (guid: string | null) => {
+    console.log("Client Disconnected");
+    if (guid) socketHandler.onSocketDisconnect(guid);
+  },
+  onError: (error: Error, guid: string | null) => {
+    console.log(error.message);
+  },
+});
+wSServer.createServer();
+wSServer.startListening(3000, "localhost");
