@@ -24,7 +24,7 @@ tcpServer.setEvents({
   },
 });
 tcpServer.createServer();
-tcpServer.startListening(3000, "localhost");
+tcpServer.startListening(3000, "0.0.0.0");
 
 const wSServer = new WSServer();
 wSServer.setOnNewSocket((socket: ISocket) => {

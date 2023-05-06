@@ -20,20 +20,78 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const chatAndExitHandler = (command: string, guid: string): void => {
+const continueChattingExitHandler = (command: string, guid: string) => {
   switch (command) {
-    case "1": {
-      rl.question("Enter your message: ", (message: string) => {
-        client1.sendMessage(message, guid, [
-          client1.getCurrentChatId() || "-1",
-        ]);
-      });
+    case "1":
+      {
+        rl.question("Enter your message: ", (message: string) => {
+          client1.sendMessage(message, guid, [
+            client1.getCurrentChatId() || "-1",
+          ]);
+          setPromptsToContinueChatting(guid);
+        });
+      }
       break;
+    case "2": {
+      setPromptsToSendMsg(guid);
     }
 
     default:
       break;
   }
+};
+
+const setPromptsToContinueChatting = (guid: string) => {
+  rl.removeAllListeners("line");
+  rl.on("line", (input: string) => {
+    continueChattingExitHandler(input.trim(), guid);
+  });
+  rl.setPrompt(`
+      1)continue chatting 
+      2)exit
+      `);
+  rl.prompt();
+};
+
+const chatAndExitHandler = (command: string, guid: string): void => {
+  switch (command) {
+    case "1": {
+      rl.question("Enter the user ID: ", (userId: string) => {
+        client1.setCurrentChatId(userId);
+        rl.question("Enter your message: ", (message: string) => {
+          client1.sendMessage(message, guid, [
+            client1.getCurrentChatId() || "-1",
+          ]);
+
+          setPromptsToContinueChatting(guid);
+        });
+      });
+      break;
+    }
+    case "2": {
+      client1.getUsers();
+      client1.serverResponseHandler.getUsers().then((res) => {
+        console.log("other users: ");
+        console.log(res);
+        setPromptsToSendMsg(guid);
+      });
+    }
+
+    default:
+      break;
+  }
+};
+
+const setPromptsToSendMsg = (guid: string) => {
+  rl.removeAllListeners("line");
+  rl.on("line", (input: string) => {
+    chatAndExitHandler(input.trim(), guid);
+  });
+  rl.setPrompt(`
+  1)send message 
+  2)getUsers
+  `);
+  rl.prompt();
 };
 
 function loginAndExitHandler(command: string): void {
@@ -50,25 +108,7 @@ function loginAndExitHandler(command: string): void {
               `);
               rl.prompt();
             } else {
-              client1.getUsers();
-
-              rl.question("Enter the user ID: ", (userId: string) => {
-                client1.setCurrentChatId(userId);
-                rl.question("Enter your message: ", (message: string) => {
-                  client1.sendMessage(message, res.guid, [
-                    client1.getCurrentChatId() || "-1",
-                  ]);
-                  rl.removeAllListeners("line");
-                  rl.on("line", (input: string) => {
-                    chatAndExitHandler(input.trim(), res.guid);
-                  });
-                  rl.setPrompt(`
-              1)continue chatting 
-              2)exit
-              `);
-                  rl.prompt();
-                });
-              });
+              setPromptsToSendMsg(res.guid);
             }
           });
         });

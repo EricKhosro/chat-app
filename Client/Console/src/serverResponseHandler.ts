@@ -69,12 +69,10 @@ export class ServerResponseHandler {
     });
 
   #getUsersHandler = (values: IGetUsersResponse) => {
-    console.log("other users: ");
     const res: Array<IFriends> = [];
     values.users.map((u) => {
       if (u.id !== this.#guid) {
         res.push(u);
-        console.log(u);
       }
     });
     this.#users = res;
