@@ -4,6 +4,7 @@ import {
   ISendMessageResponse,
   SendMessageDTO,
 } from "../interfaces/sendMessageInterface";
+import { globalUserManager } from "./login.js";
 
 export class SendMessage implements IMethodClass<SendMessageDTO, void> {
   public handle = (data: SendMessageDTO, guid: string | null) => {
@@ -17,7 +18,7 @@ export class SendMessage implements IMethodClass<SendMessageDTO, void> {
           methodName: "sendMessage",
           body: {
             message: data.message,
-            senderName: data.senderName,
+            senderName: globalUserManager.getName(guid || ""),
           },
         });
       });
