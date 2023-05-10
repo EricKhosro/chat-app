@@ -5,6 +5,7 @@ export class UserManager {
   #users: Array<IUser> = [
     { username: "user1", password: "123", id: null },
     { username: "user2", password: "321", id: null },
+    { username: "user3", password: "321", id: null },
   ];
 
   public getUsersByID = (userIds?: Array<string>) => {
@@ -28,6 +29,11 @@ export class UserManager {
       if (targetUser) res.push(targetUser);
     });
     return res;
+  };
+
+  public getName = (guid: string): string => {
+    const targetUser = this.#users.find((u) => u.id === guid);
+    return targetUser?.username || "";
   };
 
   public getFriends = () => {
