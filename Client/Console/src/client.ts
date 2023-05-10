@@ -10,13 +10,13 @@ import { ServerResponseHandler } from "./serverResponseHandler.js";
 
 export class Client implements IClient {
   #client: net.Socket;
-  #name: string;
+  // #name: string;
   #currentChatId: string | null = null;
 
   serverResponseHandler = new ServerResponseHandler();
   constructor(clientName: string) {
     this.#client = new net.Socket();
-    this.#name = clientName;
+    // this.#name = clientName;
     this.#client.on("data", (data: Buffer) => {
       // console.log(data.toString());
       this.serverResponseHandler.deserialize(data);
@@ -28,8 +28,8 @@ export class Client implements IClient {
   }
 
   public connectToServer = () => {
-    this.#client.connect(3000, "localhost", () => {
-      console.log(`${this.#name} connected`);
+    this.#client.connect(3000, "0.0.0.0", () => {
+      console.log(`you're connected`);
     });
   };
 
@@ -81,7 +81,7 @@ export class Client implements IClient {
         body: {
           message,
           receiversIDs: finalReceiversIDs,
-          senderName: this.#name,
+          senderName: guid,
         },
       });
     } else {
@@ -99,7 +99,7 @@ export class Client implements IClient {
         body: {
           message,
           receiversIDs: finalReceiversIDs,
-          senderName: this.#name,
+          senderName: guid,
         },
       });
     }
