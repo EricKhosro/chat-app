@@ -30,11 +30,13 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-start items-center gap-3">
       <TextInput
+        type="text"
         name="username"
         onChange={changeHandler}
         value={values.username}
       />
       <TextInput
+        type="password"
         name="password"
         onChange={changeHandler}
         value={values.password}
