@@ -1,4 +1,3 @@
-import "./App.css";
 import { IContext, ServerResponse } from "./Interfaces/commonInterfaces";
 import Routes from "./Routes/Routes";
 import { useEffect, useState, createContext } from "react";
