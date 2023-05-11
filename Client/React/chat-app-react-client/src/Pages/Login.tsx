@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [values, setValues] = useState<LoginFormValues>({} as LoginFormValues);
 
-  const { socket, serverResponse } = useContext(Context);
+  const { socket, serverResponse, isConnected } = useContext(Context);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center gap-3">
+    <div className="flex flex-col justify-start items-center gap-3 border-purple-600 border-2 rounded p-5">
       <TextInput
         type="text"
         name="username"
@@ -50,7 +50,7 @@ const Login = () => {
         onChange={changeHandler}
         value={values.password}
       />
-      <Button text="Login" onClick={clickHandler} />
+      <Button text="Login" onClick={clickHandler} disabled={!isConnected} />
     </div>
   );
 };
