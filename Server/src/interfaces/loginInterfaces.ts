@@ -9,5 +9,6 @@ export interface ILoginRes extends IResponse {
   body: {
     token: string;
     msg: string;
+    data: boolean;
   };
 }

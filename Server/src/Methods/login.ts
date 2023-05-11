@@ -23,6 +23,7 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
         body: {
           msg: "successful login",
           token: guid || "",
+          data: true,
         },
       };
     }
@@ -31,6 +32,7 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
       body: {
         msg: "wrong user pass",
         token: "-1",
+        data: false,
       },
     };
   };
