@@ -22,13 +22,14 @@ function App() {
     };
 
     newSocket.onmessage = (event) => {
-      setServerResponse(event.data);
-      console.log(event.data);
-      
+      setServerResponse(JSON.parse(event.data));
     };
 
     newSocket.onclose = () => {
       console.log("WebSocket connection closed");
+      setTimeout(() => {
+        setSocket(new WebSocket("ws://localhost:5000"));
+      }, 3000);
     };
 
     return () => {
