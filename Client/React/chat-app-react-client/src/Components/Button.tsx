@@ -11,7 +11,11 @@ const Button = ({
   disabled = false,
 }: ButtonProps) => {
   return (
-    <button className={`${className}`} onClick={onClick} disabled={disabled}>
+    <button
+      className={`py-2 px-5 bg-purple-600 text-white rounded disabled:bg-slate-400 disabled:text-black ${className}`}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {text}
     </button>
   );
