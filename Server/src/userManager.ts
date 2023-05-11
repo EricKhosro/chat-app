@@ -1,4 +1,4 @@
-import { IGetUsersData } from "./interfaces/getUsersInterface";
+import { globalUserManager } from "./Methods/login.js";
 import { IFriends, IUser } from "./interfaces/interfaces";
 
 export class UserManager {
@@ -36,10 +36,12 @@ export class UserManager {
     return targetUser?.username || "";
   };
 
-  public getFriends = () => {
+  public getFriends = (guid: string | null) => {
     const friends: Array<IFriends> = [];
     this.#users.forEach((user) => {
-      friends.push({ username: user.username, id: user.id || null });
+      if (guid && user.username !== globalUserManager.getName(guid))
+        friends.push({ username: user.username, id: user.id });
+      else friends.push({ username: user.username, id: user.id });
     });
     return friends;
   };
@@ -55,3 +57,4 @@ export class UserManager {
     });
   };
 }
+
