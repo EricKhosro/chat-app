@@ -6,4 +6,5 @@ export interface ServerResponse {
 export interface IContext {
   socket: WebSocket | null;
   serverResponse: ServerResponse;
+  isConnected: boolean;
 }
