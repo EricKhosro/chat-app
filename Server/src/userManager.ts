@@ -39,9 +39,9 @@ export class UserManager {
   public getFriends = (guid: string | null) => {
     const friends: Array<IFriends> = [];
     this.#users.forEach((user) => {
-      if (guid && user.username !== globalUserManager.getName(guid))
+      if (!guid) friends.push({ username: user.username, id: user.id });
+      else if (user.username !== globalUserManager.getName(guid))
         friends.push({ username: user.username, id: user.id });
-      else friends.push({ username: user.username, id: user.id });
     });
     return friends;
   };
@@ -57,4 +57,3 @@ export class UserManager {
     });
   };
 }
-
