@@ -1,5 +1,5 @@
 import { Routes as Swiich, Route } from "react-router-dom";
-import Messenger from "../Pages/Messenger";
+import Messenger from "../Pages/Messenger/Messenger";
 
 const AfterAuthRoutes = () => {
   return (

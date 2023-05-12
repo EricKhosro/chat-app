@@ -16,7 +16,10 @@ const Login = () => {
     if (!serverResponse || serverResponse.methodName !== "login") return;
 
     if (!serverResponse.body.data) toast.error(serverResponse.body.msg);
-    if (serverResponse.body.data) navigate("/Messenger");
+    if (serverResponse.body.data) {
+      localStorage.setItem("username", values.username);
+      navigate("/Messenger");
+    }
   }, [serverResponse]);
 
   const changeHandler = (name: string, value: any) => {
@@ -37,20 +40,22 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center gap-3 border-purple-600 border-2 rounded p-5">
-      <TextInput
-        type="text"
-        name="username"
-        onChange={changeHandler}
-        value={values.username}
-      />
-      <TextInput
-        type="password"
-        name="password"
-        onChange={changeHandler}
-        value={values.password}
-      />
-      <Button text="Login" onClick={clickHandler} disabled={!isConnected} />
+    <div className="h-screen w-screen flex justify-center items-center">
+      <div className="w-56 h-min flex flex-col justify-start items-center gap-3 border-purple-600 border-2 rounded p-5">
+        <TextInput
+          type="text"
+          name="username"
+          onChange={changeHandler}
+          value={values.username}
+        />
+        <TextInput
+          type="password"
+          name="password"
+          onChange={changeHandler}
+          value={values.password}
+        />
+        <Button text="Login" onClick={clickHandler} disabled={!isConnected} />
+      </div>
     </div>
   );
 };
