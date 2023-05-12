@@ -2,7 +2,7 @@ import { Users } from "../../Interfaces/messengerInterfaces";
 
 interface UsersBoxProps {
   users: Array<Users>;
-  onUserClick: (username: string) => void;
+  onUserClick: (user: Users) => void;
 }
 
 const UsersBox = ({ users, onUserClick }: UsersBoxProps) => {
@@ -15,7 +15,7 @@ const UsersBox = ({ users, onUserClick }: UsersBoxProps) => {
         <div
           className="min-w-min px-5 py-2 rounded bg-purple-300 text-black cursor-pointer"
           key={u.username}
-          onClick={() => onUserClick(u.id)}
+          onClick={() => onUserClick(u)}
         >
           {u.username}
         </div>

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import TextInput from "../../Components/TextInput";
-import { Message } from "../../Interfaces/messengerInterfaces";
+import { Message, Users } from "../../Interfaces/messengerInterfaces";
 
 interface ChatBoxProps {
   sendMessage: (message: string) => void;
-  selectedUser: string | null;
+  selectedUser: Users | null;
   messages: Array<Message>;
 }
 
@@ -24,7 +24,7 @@ const ChatBox = ({ sendMessage, selectedUser, messages }: ChatBoxProps) => {
   return (
     <div className=" w-full flex flex-col justify-start items-center gap-12">
       <div className="shadow-md text-purple-600 w-full text-center">
-        {selectedUser}
+        {selectedUser.username}
       </div>
       <div className="w-full px-9 max-h-full overflow-y-auto">
         {messages.map((msg, index) => {

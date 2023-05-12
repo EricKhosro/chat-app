@@ -8,7 +8,7 @@ const Messenger = () => {
   const { socket, serverResponse } = useContext(Context);
   const [users, setUsers] = useState<Array<Users>>([]);
   const [messages, setMessages] = useState<Array<Message>>([]);
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<Users | null>(null);
   useEffect(() => {
     getUsers();
   }, []);
