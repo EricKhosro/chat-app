@@ -46,6 +46,17 @@ export class UserManager {
     return friends;
   };
 
+  public getOnlineFriends = (guid: string | null) => {
+    const friends: Array<IFriends> = [];
+    this.#users.forEach((user) => {
+      if (!guid) {
+        if (user.id) friends.push({ username: user.username, id: user.id });
+      } else if (user.username !== globalUserManager.getName(guid) && user.id)
+        friends.push({ username: user.username, id: user.id });
+    });
+    return friends;
+  };
+
   public addUser = (user: IUser) => this.#users.push(user);
 
   public updateUserId = (user: IUser, newId: string | null) => {

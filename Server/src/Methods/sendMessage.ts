@@ -8,7 +8,6 @@ import { globalUserManager } from "./login.js";
 
 export class SendMessage implements IMethodClass<SendMessageDTO, void> {
   public handle = (data: SendMessageDTO, guid: string | null) => {
-    console.log({ data });
     try {
       const receiversSockets = globalSocketPool.getRegisteredSockets(
         data.receiversIDs

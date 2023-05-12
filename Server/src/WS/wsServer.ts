@@ -15,7 +15,7 @@ export class WSServer implements IServer {
 
       const wsSocket = new WSSocket(socket);
       if (!this.#events)
-        return console.log("tcp server events was not provided");
+        return console.log("WS server events was not provided");
       wsSocket.setEvents(this.#events);
 
       if (this.#onNewSocket) this.#onNewSocket(wsSocket);
