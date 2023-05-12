@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { IContext, ServerResponse } from "./Interfaces/commonInterfaces";
 import Routes from "./Routes/Routes";
 import { useEffect, useState, createContext } from "react";
@@ -14,7 +15,8 @@ function App() {
     {} as ServerResponse
   );
   const [isConnected, setIsConnected] = useState(false);
-  console.log({ appServerResponse: serverResponse });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const newSocket = new WebSocket("ws://localhost:5000");
@@ -39,6 +41,8 @@ function App() {
     return () => {
       newSocket.close();
       setSocket(null);
+      localStorage.removeItem("username");
+      navigate("/");
     };
   }, []);
 
