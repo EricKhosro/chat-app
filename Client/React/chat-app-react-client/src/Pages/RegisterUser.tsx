@@ -1,23 +1,29 @@
 import { useState, useContext, useEffect } from "react";
-import { LoginFormValues } from "../Interfaces/loginInterfaces";
 import TextInput from "../Components/TextInput";
 import Button from "../Components/Button";
+import { RegisterFormValues } from "../Interfaces/registerInterface";
 import { Context } from "../App";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ServerResponse } from "../Interfaces/commonInterfaces";
 
-const Login = () => {
-  const [values, setValues] = useState<LoginFormValues>({} as LoginFormValues);
+const RegisterUser = () => {
+  const [values, setValues] = useState<RegisterFormValues>(
+    {} as RegisterFormValues
+  );
 
-  const { socket, serverResponse, isConnected } = useContext(Context);
+  const { socket, serverResponse, isConnected, setServerResponse } =
+    useContext(Context);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!serverResponse || serverResponse.methodName !== "login") return;
+    if (!serverResponse || serverResponse.methodName !== "registerUser") return;
 
     if (!serverResponse.body.data) toast.error(serverResponse.body.msg);
     if (serverResponse.body.data) {
-      navigate("/Messenger", { state: { username: values.username } });
+      toast.success(serverResponse.body.msg);
+      navigate("/");
+      if (setServerResponse) setServerResponse({} as ServerResponse);
     }
   }, [serverResponse]);
 
@@ -25,26 +31,37 @@ const Login = () => {
     setValues({ ...values, [name]: value });
   };
 
-  const keydownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") clickHandler();
-  };
-
   const clickHandler = () => {
     if (socket && socket.readyState === WebSocket.OPEN)
       socket?.send(
         JSON.stringify({
-          methodName: "login",
+          methodName: "registerUser",
           body: {
             username: values.username,
             password: values.password,
+            name: values.name,
           },
         })
       );
   };
 
+  const checkDisabled = () => {
+    if (!isConnected) return true;
+    if (!values) return true;
+    if (!values.name || !values.username || !values.password) return true;
+    return false;
+  };
+
   return (
     <div className="h-screen w-screen flex justify-center items-center">
       <div className="w-56 h-min flex flex-col justify-start items-center gap-3 border-purple-600 border-2 rounded p-5">
+        <TextInput
+          placeholder="name"
+          type="text"
+          name="name"
+          onChange={changeHandler}
+          value={values.name}
+        />
         <TextInput
           placeholder="username"
           type="text"
@@ -58,18 +75,16 @@ const Login = () => {
           name="password"
           onChange={changeHandler}
           value={values.password}
-          onKeyDown={keydownHandler}
         />
-        <Button text="Login" onClick={clickHandler} disabled={!isConnected} />
-        <div
-          className="text-sm cursor-pointer"
-          onClick={() => navigate("/RegisterUser")}
-        >
-          Don't have an account? Register here
-        </div>
+
+        <Button
+          text="Register"
+          onClick={clickHandler}
+          disabled={checkDisabled()}
+        />
       </div>
     </div>
   );
 };
 
-export default Login;
+export default RegisterUser;

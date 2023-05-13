@@ -1,6 +1,7 @@
 import { ISocket, ISocketHandler } from "./interfaces/interfaces";
 import crypto from "crypto";
 import { SocketPool } from "./socketPool.js";
+import { globalUserManager } from "./Methods/login.js";
 
 export const globalSocketPool = new SocketPool();
 export class SocketHandler implements ISocketHandler {
@@ -16,5 +17,6 @@ export class SocketHandler implements ISocketHandler {
   };
   public onSocketDisconnect = (guid: string) => {
     globalSocketPool.removeRegisteredSocket(guid);
+    globalUserManager.logoutUser(guid);
   };
 }

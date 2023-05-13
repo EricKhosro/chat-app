@@ -11,19 +11,33 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
         (user) =>
           user.username === data.username && user.password === data.password
       );
+    console.log({ targetUser });
+
+
 
     if (targetUser) {
-      globalUserManager.updateUserId(
-        { username: data.username, password: data.password, id: null },
-        guid
-      );
+      if (!targetUser.id) {
+        globalUserManager.updateUserId(
+          { username: data.username, password: data.password, id: null },
+          guid
+        );
+        console.log({ targetUser });
 
+        return {
+          methodName: "login",
+          body: {
+            msg: "successful login",
+            token: guid || "",
+            data: true,
+          },
+        };
+      }
       return {
         methodName: "login",
         body: {
-          msg: "successful login",
-          token: guid || "",
-          data: true,
+          msg: `${targetUser.username} is already logged in`,
+          token: "-1",
+          data: false,
         },
       };
     }

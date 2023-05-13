@@ -5,6 +5,7 @@ interface TextInputProps {
   className?: string;
   type?: "text" | "password";
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  placeholder: string;
 }
 
 const TextInput = ({
@@ -13,6 +14,7 @@ const TextInput = ({
   onChange,
   value,
   onKeyDown,
+  placeholder,
   type = "text",
 }: TextInputProps) => {
   const keydownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -22,6 +24,7 @@ const TextInput = ({
 
   return (
     <input
+      placeholder={placeholder}
       type={type}
       className={`w-full border-gray-400 rounded outline-none border-2 px-2 py-1 ${className}`}
       value={value || ""}

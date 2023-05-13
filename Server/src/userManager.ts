@@ -54,17 +54,37 @@ export class UserManager {
       } else if (user.username !== globalUserManager.getName(guid) && user.id)
         friends.push({ username: user.username, id: user.id });
     });
+    console.log({ friends });
+
     return friends;
   };
 
-  public addUser = (user: IUser) => this.#users.push(user);
+  public addUser = (user: IUser) => {
+    this.#users.forEach((u) => {
+      if (u.username === user.username)
+        throw new Error(`username is already taken`);
+    });
+    this.#users.push(user);
+  };
 
   public updateUserId = (user: IUser, newId: string | null) => {
     this.#users.forEach((u) => {
-      if (user.username && user.password)
+      if (user.username && user.password) {
         if (user.username === u.username && user.password === u.password)
           u.id = newId;
-      if (user.id) if (user.id === u.id) u.id = newId;
+      } else if (user.id) if (user.id === u.id) u.id = newId;
+    });
+  };
+
+  public logoutUser = (guid: string) => {
+    console.log({ logoutGuid: guid });
+
+    this.#users.forEach((u) => {
+      console.log(u.id);
+      if (u.id === guid) {
+        u.id = null;
+        console.log(`${u.username} logged out`);
+      }
     });
   };
 }

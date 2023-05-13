@@ -4,21 +4,32 @@ import { Message, Users } from "../../Interfaces/messengerInterfaces";
 import UsersBox from "./UsersBox";
 import ChatBox from "./ChatBox";
 import { sendRequest } from "../../helper";
+import { useLocation } from "react-router-dom";
+
 const Messenger = () => {
   const { socket, serverResponse } = useContext(Context);
   const [users, setUsers] = useState<Array<Users>>([]);
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [selectedUser, setSelectedUser] = useState<Users | null>(null);
+  const location = useLocation();
+  const myUsername = location.state.username;
   useEffect(() => {
     getUsers();
+    const interval = setInterval(() => {
+      getUsers();
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     console.log(serverResponse);
     if (!serverResponse || !serverResponse.methodName) return;
 
-    if (serverResponse.methodName === "getUsers")
+    if (serverResponse.methodName === "getUsers") {
       setUsers(serverResponse.body.users);
+      if (!serverResponse.body.users.length) setSelectedUser(null);
+    }
     if (serverResponse.methodName === "sendMessage") {
       console.log(serverResponse);
 
@@ -37,13 +48,15 @@ const Messenger = () => {
   };
 
   const sendMessageHandler = (message: string) => {
-    const username = localStorage.getItem("username");
-    if (!username) return;
+    if (!myUsername) return;
     sendRequest(socket, "sendMessage", {
       message,
-      receiversIDs: [selectedUser],
+      receiversIDs: [selectedUser?.id],
     });
-    setMessages([...messages, { message, senderName: username }]);
+    setMessages([
+      ...messages,
+      { message, senderName: myUsername, recieverName: selectedUser?.username },
+    ]);
   };
 
   return (
@@ -53,6 +66,7 @@ const Messenger = () => {
         sendMessage={sendMessageHandler}
         selectedUser={selectedUser}
         messages={messages}
+        myUsername={myUsername}
       />
     </div>
   );

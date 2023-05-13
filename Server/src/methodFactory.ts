@@ -1,6 +1,7 @@
 import { IMethodClass, IMethodFactory } from "./interfaces/interfaces";
 import { GetUsers } from "./Methods/getUsers.js";
 import { Login } from "./Methods/login.js";
+import { RegisterUser } from "./Methods/registerUser.js";
 import { SendMessage } from "./Methods/sendMessage.js";
 
 export default class MethodFactory implements IMethodFactory<any, any> {
@@ -17,6 +18,8 @@ export default class MethodFactory implements IMethodFactory<any, any> {
         return new GetUsers();
       case "sendMessage":
         return new SendMessage();
+      case "registerUser":
+        return new RegisterUser();
       default: {
         throw new Error("invalid method name");
       }

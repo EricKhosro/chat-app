@@ -5,5 +5,6 @@ export interface Users {
 
 export interface Message {
   senderName: string;
+  recieverName?: string;
   message: string;
 }

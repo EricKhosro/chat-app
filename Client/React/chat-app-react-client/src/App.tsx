@@ -7,6 +7,7 @@ export const Context = createContext<IContext>({
   socket: null,
   serverResponse: { methodName: "", body: {} },
   isConnected: false,
+  setServerResponse: () => {},
 });
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const newSocket = new WebSocket("ws://localhost:5000");
+    const newSocket = new WebSocket("ws://10.21.9.24:5000");
     setSocket(newSocket);
     newSocket.onopen = () => {
       setIsConnected(true);
@@ -39,16 +40,17 @@ function App() {
     };
 
     return () => {
+      navigate("/");
       newSocket.close();
       setSocket(null);
-      localStorage.removeItem("username");
-      navigate("/");
     };
   }, []);
 
   return (
     <div className="page">
-      <Context.Provider value={{ socket, serverResponse, isConnected }}>
+      <Context.Provider
+        value={{ socket, serverResponse, isConnected, setServerResponse }}
+      >
         <Routes />
       </Context.Provider>
     </div>

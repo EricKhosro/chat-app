@@ -6,9 +6,15 @@ interface ChatBoxProps {
   sendMessage: (message: string) => void;
   selectedUser: Users | null;
   messages: Array<Message>;
+  myUsername: string;
 }
 
-const ChatBox = ({ sendMessage, selectedUser, messages }: ChatBoxProps) => {
+const ChatBox = ({
+  sendMessage,
+  selectedUser,
+  messages,
+  myUsername,
+}: ChatBoxProps) => {
   const [msg, setMsg] = useState<string | number>("");
 
   const sendMessageHandler = () => {
@@ -20,32 +26,45 @@ const ChatBox = ({ sendMessage, selectedUser, messages }: ChatBoxProps) => {
     if (e.key === "Enter") sendMessageHandler();
   };
 
-  if (!selectedUser) return <>select a user to chat with</>;
+  if (!selectedUser)
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <div className="m-auto">select a user to chat with</div>
+      </div>
+    );
   return (
-    <div className=" w-full flex flex-col justify-start items-center gap-12">
+    <div className="w-full flex flex-col justify-start items-center gap-12">
       <div className="shadow-md text-purple-600 w-full text-center">
         {selectedUser.username}
       </div>
       <div className="w-full px-9 max-h-full overflow-y-auto">
         {messages.map((msg, index) => {
-          return (
-            <div
-              className={`max-w-min whitespace-nowrap rounded p-5 border-2 shadow-lg mb-5 ${
-                msg.senderName === localStorage.getItem("username")
-                  ? "ml-auto border-purple-300"
-                  : "mr-auto border-purple-800"
-              }`}
-              key={index}
-            >
-              {msg.senderName}: {msg.message}
-            </div>
-          );
+          if (
+            msg.senderName === selectedUser.username ||
+            msg.recieverName === selectedUser.username
+          )
+            return (
+              <div
+                className={`max-w-min whitespace-nowrap rounded p-5 border-2 shadow-lg mb-5 ${
+                  msg.senderName === myUsername
+                    ? "ml-auto border-purple-300"
+                    : "mr-auto border-purple-800"
+                }`}
+                key={index}
+              >
+                {msg.senderName}: {msg.message}
+              </div>
+            );
         })}
       </div>
-      <div className="mt-auto w-full flex flex-row justify-start items-center gap-4">
+      <div className="mt-auto w-full flex flex-row justify-start items-center gap-4 px-5 mb-1">
         <TextInput
+          placeholder="message"
           name=""
-          onChange={(n, value) => setMsg(value)}
+          onChange={(n, value) => {
+            n = n + 1;
+            setMsg(value);
+          }}
           value={msg}
           onKeyDown={keydownHandler}
         />
