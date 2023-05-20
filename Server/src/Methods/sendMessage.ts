@@ -1,15 +1,12 @@
-import { globalSocketPool } from "../SocketHandler.js";
-import { IMethodClass, IPacket } from "../interfaces/interfaces";
-import {
-  ISendMessageResponse,
-  SendMessageDTO,
-} from "../interfaces/sendMessageInterface";
-import { globalUserManager } from "./login.js";
+import { IMethodClass } from "../interfaces/interfaces";
+import { SendMessageDTO } from "../interfaces/sendMessageInterface";
+import { SocketPool } from "../socketPool.js";
+import { UserManager } from "../userManager.js";
 
 export class SendMessage implements IMethodClass<SendMessageDTO, void> {
   public handle = (data: SendMessageDTO, guid: string | null) => {
     try {
-      const receiversSockets = globalSocketPool.getRegisteredSockets(
+      const receiversSockets = SocketPool.getInstance().getRegisteredSockets(
         data.receiversIDs
       );
       receiversSockets.map((s) => {
@@ -17,7 +14,7 @@ export class SendMessage implements IMethodClass<SendMessageDTO, void> {
           methodName: "sendMessage",
           body: {
             message: data.message,
-            senderName: globalUserManager.getName(guid || ""),
+            senderName: UserManager.getInstance().getName(guid || ""),
           },
         });
       });

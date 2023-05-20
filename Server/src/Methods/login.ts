@@ -2,10 +2,9 @@ import { UserManager } from "../userManager.js";
 import { IMethodClass } from "../interfaces/interfaces.js";
 import { ILoginData, ILoginRes } from "../interfaces/loginInterfaces.js";
 
-export const globalUserManager = new UserManager();
 export class Login implements IMethodClass<ILoginData, ILoginRes> {
   public handle = (data: ILoginData, guid: string | null): ILoginRes => {
-    const targetUser = globalUserManager
+    const targetUser = UserManager.getInstance()
       .getUsersByUsername([data.username])
       .find(
         (user) =>
@@ -13,11 +12,9 @@ export class Login implements IMethodClass<ILoginData, ILoginRes> {
       );
     console.log({ targetUser });
 
-
-
     if (targetUser) {
       if (!targetUser.id) {
-        globalUserManager.updateUserId(
+        UserManager.getInstance().updateUserId(
           { username: data.username, password: data.password, id: null },
           guid
         );

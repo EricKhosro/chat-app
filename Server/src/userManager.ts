@@ -1,7 +1,18 @@
-import { globalUserManager } from "./Methods/login.js";
 import { IFriends, IUser } from "./interfaces/interfaces";
 
 export class UserManager {
+  private static instance: UserManager;
+
+  private constructor() {}
+
+  public static getInstance(): UserManager {
+    if (!UserManager.instance) {
+      UserManager.instance = new UserManager();
+    }
+
+    return UserManager.instance;
+  }
+
   #users: Array<IUser> = [
     { username: "user1", password: "123", id: null },
     { username: "user2", password: "321", id: null },
@@ -40,7 +51,7 @@ export class UserManager {
     const friends: Array<IFriends> = [];
     this.#users.forEach((user) => {
       if (!guid) friends.push({ username: user.username, id: user.id });
-      else if (user.username !== globalUserManager.getName(guid))
+      else if (user.username !== UserManager.getInstance().getName(guid))
         friends.push({ username: user.username, id: user.id });
     });
     return friends;
@@ -51,7 +62,10 @@ export class UserManager {
     this.#users.forEach((user) => {
       if (!guid) {
         if (user.id) friends.push({ username: user.username, id: user.id });
-      } else if (user.username !== globalUserManager.getName(guid) && user.id)
+      } else if (
+        user.username !== UserManager.getInstance().getName(guid) &&
+        user.id
+      )
         friends.push({ username: user.username, id: user.id });
     });
     console.log({ friends });

@@ -1,6 +1,16 @@
 import { IRegisteredSocket } from "./interfaces/interfaces";
 
 export class SocketPool {
+  private static instance: SocketPool;
+
+  private constructor() {}
+
+  public static getInstance = () => {
+    if (!SocketPool.instance) SocketPool.instance = new SocketPool();
+
+    return SocketPool.instance;
+  };
+
   #registeredSockets: Array<IRegisteredSocket> = [];
 
   public getRegisteredSockets = (socketIds: Array<string | null>) => {

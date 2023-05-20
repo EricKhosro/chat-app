@@ -3,14 +3,14 @@ import {
   RegisterInput,
   RegisterResponse,
 } from "../interfaces/registerUserInterface";
-import { globalUserManager } from "./login.js";
+import { UserManager } from "../userManager.js";
 
 export class RegisterUser
   implements IMethodClass<RegisterInput, RegisterResponse>
 {
   public handle = (data: RegisterInput, guid: string | null) => {
     try {
-      globalUserManager.addUser({
+      UserManager.getInstance().addUser({
         username: data.username,
         password: data.password,
         id: null,
