@@ -1,6 +1,6 @@
-import { useState } from "react";
-import TextInput from "../../Components/TextInput";
+import { useState, Fragment } from "react";
 import { Message, Users } from "../../Interfaces/messengerInterfaces";
+import MultiLineTextInput from "../../Components/MultiLineTextInput";
 
 interface ChatBoxProps {
   sendMessage: (message: string) => void;
@@ -22,8 +22,9 @@ const ChatBox = ({
     setMsg("");
   };
 
-  const keydownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") sendMessageHandler();
+  const keydownHandler = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // if (e.key === "Enter") sendMessageHandler();
+    if (e.keyCode === 13 && e.ctrlKey) sendMessageHandler();
   };
 
   if (!selectedUser)
@@ -42,7 +43,7 @@ const ChatBox = ({
           if (
             msg.senderName === selectedUser.username ||
             msg.recieverName === selectedUser.username
-          )
+          ) {
             return (
               <div
                 className={`max-w-min whitespace-nowrap rounded p-5 border-2 shadow-lg mb-5 ${
@@ -52,13 +53,29 @@ const ChatBox = ({
                 }`}
                 key={index}
               >
-                {msg.senderName}: {msg.message}
+                <div className="flex flex-row justify-start items-start gap-5">
+                  <div>{msg.senderName}:</div>
+                  <div>
+                    {msg.message.includes("\n")
+                      ? msg.message.split("\n").map((line, index) => {
+                          return (
+                            <Fragment key={index}>
+                              {line}
+                              <br />
+                            </Fragment>
+                          );
+                        })
+                      : msg.message}
+                  </div>
+                </div>
               </div>
             );
+          }
+          return null;
         })}
       </div>
       <div className="mt-auto w-full flex flex-row justify-start items-center gap-4 px-5 mb-1">
-        <TextInput
+        <MultiLineTextInput
           placeholder="message"
           name=""
           onChange={(n, value) => {

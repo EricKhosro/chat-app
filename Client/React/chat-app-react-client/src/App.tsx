@@ -20,7 +20,8 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const newSocket = new WebSocket("ws://10.21.9.24:5000");
+    const newSocket = new WebSocket("ws://localhost:5000");
+    // const newSocket = new WebSocket("ws://10.21.9.24:5000");
     setSocket(newSocket);
     newSocket.onopen = () => {
       setIsConnected(true);
@@ -47,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <div className="page">
+    <div className="Page">
       <Context.Provider
         value={{ socket, serverResponse, isConnected, setServerResponse }}
       >

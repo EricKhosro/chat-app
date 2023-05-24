@@ -4,12 +4,10 @@ import AfterAuthRoutes from "./AfterAuthRoutes";
 
 const Routes = () => {
   return (
-    <>
-      <Switch>
-        <Route element={<Login />} path="/" />
-        <Route element={<AfterAuthRoutes />} path="*" />
-      </Switch>
-    </>
+    <Switch>
+      <Route path="/chat-app/" element={<Login />} />
+      <Route path="*" element={<AfterAuthRoutes />} />
+    </Switch>
   );
 };
 

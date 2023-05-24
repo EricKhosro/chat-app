@@ -8,7 +8,9 @@ export class WSServer implements IServer {
   #events: ISocketEvents | null = null;
 
   public createServer = () => {
-    this.#server = new WebSocketServer({ port: 5000, host: "10.21.9.24" });
+    // this.#server = new WebSocketServer({ port: 5000, host: "10.21.9.24" });
+    this.#server = new WebSocketServer({ port: 5000, host: "0.0.0.0" });
+    
 
     this.#server.on("connection", (socket) => {
       console.log("WS Client connected");
