@@ -22,7 +22,7 @@ const RegisterUser = () => {
     if (!serverResponse.body.data) toast.error(serverResponse.body.msg);
     if (serverResponse.body.data) {
       toast.success(serverResponse.body.msg);
-      navigate("/");
+      navigate("/chat-app/");
       if (setServerResponse) setServerResponse({} as ServerResponse);
     }
   }, [serverResponse]);

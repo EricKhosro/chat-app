@@ -1,10 +1,10 @@
-interface TextInputProps {
+export interface TextInputProps<T> {
   name: string;
   value: string | number;
   onChange: (name: string, value: string | number) => void;
   className?: string;
   type?: "text" | "password";
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<T>) => void;
   placeholder: string;
 }
 
@@ -16,7 +16,7 @@ const TextInput = ({
   onKeyDown,
   placeholder,
   type = "text",
-}: TextInputProps) => {
+}: TextInputProps<HTMLInputElement>) => {
   const keydownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!onKeyDown) return;
     onKeyDown(e);
