@@ -1,19 +1,24 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import TextInput from "../Components/TextInput";
 import Button from "../Components/Button";
 import { RegisterFormValues } from "../Interfaces/registerInterface";
-import { Context } from "../App";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ServerResponse } from "../Interfaces/commonInterfaces";
+import { useAppDispatch, useAppSelector } from "../Store/hooks";
+import { setServerResponse } from "../Slices/connectionSlice";
 
 const RegisterUser = () => {
   const [values, setValues] = useState<RegisterFormValues>(
     {} as RegisterFormValues
   );
 
-  const { socket, serverResponse, isConnected, setServerResponse } =
-    useContext(Context);
+  const { socket, serverResponse, isConnected } = useAppSelector(
+    (store) => store.connection
+  );
+
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +28,7 @@ const RegisterUser = () => {
     if (serverResponse.body.data) {
       toast.success(serverResponse.body.msg);
       navigate("/chat-app/");
-      if (setServerResponse) setServerResponse({} as ServerResponse);
+      dispatch(setServerResponse({} as ServerResponse));
     }
   }, [serverResponse]);
 

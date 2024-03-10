@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../../App";
+import { useEffect, useState } from "react";
 import { Message, Users } from "../../Interfaces/messengerInterfaces";
 import UsersBox from "./UsersBox";
 import ChatBox from "./ChatBox";
 import { sendRequest } from "../../helper";
 import { useLocation } from "react-router-dom";
+import { useAppSelector } from "../../Store/hooks";
 
 const Messenger = () => {
-  const { socket, serverResponse } = useContext(Context);
+  const { socket, serverResponse } = useAppSelector(
+    (store) => store.connection
+  );
   const [users, setUsers] = useState<Array<Users>>([]);
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [selectedUser, setSelectedUser] = useState<Users | null>(null);

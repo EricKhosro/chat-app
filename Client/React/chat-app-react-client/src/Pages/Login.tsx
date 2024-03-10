@@ -1,17 +1,19 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { LoginFormValues } from "../Interfaces/loginInterfaces";
 import TextInput from "../Components/TextInput";
 import Button from "../Components/Button";
-import { Context } from "../App";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../Store/store";
+import { useAppSelector } from "../Store/hooks";
 
 const Login = () => {
   const [values, setValues] = useState<LoginFormValues>({} as LoginFormValues);
 
-  const { serverResponse, isConnected } = useContext(Context);
+  const { serverResponse, isConnected } = useAppSelector(
+    (store) => store.connection
+  );
   const navigate = useNavigate();
 
   const { socket } = useSelector((state: RootState) => state.connection);

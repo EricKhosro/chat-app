@@ -1,36 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { IContext, ServerResponse } from "./Interfaces/commonInterfaces";
 import Routes from "./Routes/Routes";
-import { useEffect, useState, createContext } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setSocket } from "./Slices/socketSlice";
-
-export const Context = createContext<IContext>({
-  serverResponse: { methodName: "", body: {} },
-  isConnected: false,
-  setServerResponse: () => {},
-});
+import {
+  setIsConnected,
+  setServerResponse,
+  setSocket,
+} from "./Slices/connectionSlice";
 
 function App() {
-  const [serverResponse, setServerResponse] = useState<ServerResponse>(
-    {} as ServerResponse
-  );
-
   const dispatch = useDispatch();
-  const [isConnected, setIsConnected] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const newSocket = new WebSocket("ws://10.21.9.24:5000");
+    const newSocket = new WebSocket("ws://10.81.9.10:5000");
     dispatch(setSocket(newSocket));
     newSocket.onopen = () => {
-      setIsConnected(true);
+      dispatch(setIsConnected(true));
       console.log("WebSocket connected");
     };
 
     newSocket.onmessage = (event) => {
-      setServerResponse(JSON.parse(event.data));
+      dispatch(setServerResponse(JSON.parse(event.data)));
     };
 
     newSocket.onclose = () => {
@@ -50,11 +42,7 @@ function App() {
 
   return (
     <div className="Page">
-      <Context.Provider
-        value={{ serverResponse, isConnected, setServerResponse }}
-      >
-        <Routes />
-      </Context.Provider>
+      <Routes />
     </div>
   );
 }
