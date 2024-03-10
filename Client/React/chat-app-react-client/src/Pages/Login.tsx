@@ -5,12 +5,16 @@ import Button from "../Components/Button";
 import { Context } from "../App";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../Store/store";
 
 const Login = () => {
   const [values, setValues] = useState<LoginFormValues>({} as LoginFormValues);
 
-  const { socket, serverResponse, isConnected } = useContext(Context);
+  const { serverResponse, isConnected } = useContext(Context);
   const navigate = useNavigate();
+
+  const { socket } = useSelector((state: RootState) => state.connection);
 
   useEffect(() => {
     if (!serverResponse || serverResponse.methodName !== "login") return;

@@ -4,7 +4,6 @@ export interface ServerResponse {
 }
 
 export interface IContext {
-  socket: WebSocket | null;
   serverResponse: ServerResponse;
   setServerResponse: (value: ServerResponse) => void;
   isConnected: boolean;
